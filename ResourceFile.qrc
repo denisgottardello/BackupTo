@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/Translations">
+        <file>BackupTo_it.qm</file>
+        <file>qt_it.qm</file>
+    </qresource>
+    <qresource prefix="/qt/etc">
+        <file>qt.conf</file>
+    </qresource>
+    <qresource prefix="/IconsWait">
+        <file>IconsWait/00.png</file>
+        <file>IconsWait/01.png</file>
+        <file>IconsWait/02.png</file>
+        <file>IconsWait/03.png</file>
+        <file>IconsWait/04.png</file>
+        <file>IconsWait/05.png</file>
+        <file>IconsWait/06.png</file>
+    </qresource>
+    <qresource prefix="/Icons">
+        <file>BackupTo.png</file>
+        <file>Icons/Button-Add-icon.png</file>
+        <file>Icons/Cancel-icon.png</file>
+        <file>Icons/Ok-icon.png</file>
+        <file>Icons/start-icon.png</file>
+        <file>Icons/Stop-Normal-Red-icon.png</file>
+        <file>Icons/Save-icon.png</file>
+    </qresource>
+</RCC>
