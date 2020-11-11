@@ -153,7 +153,14 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="QListWidget" name="QLWLog"/>
+          <widget class="QListView" name="QLVLog">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -236,7 +243,7 @@
  <tabstops>
   <tabstop>QTBDirectory</tabstop>
   <tabstop>QLEDirectory</tabstop>
-  <tabstop>QLWLog</tabstop>
+  <tabstop>QLVLog</tabstop>
   <tabstop>QPBStart</tabstop>
   <tabstop>QPBStop</tabstop>
   <tabstop>QPBClose</tabstop>

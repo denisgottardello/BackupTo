@@ -3,17 +3,21 @@
 
 QDEmptyDirectory::QDEmptyDirectory(QWidget *parent) : QDialog(parent), ui(new Ui::QDEmptyDirectory) {
     ui->setupUi(this);
-    ThEmptyDirectory= NULL;
+    QSIMModel= new QStandardItemModel(this);
+    connect(&Timer, SIGNAL(timeout()), this, SLOT(OnTimer()));
+    Timer.start(500);
     move(parent->window()->mapToGlobal(parent->window()->rect().center())- mapToGlobal(rect().center()));
 }
 
 QDEmptyDirectory::~QDEmptyDirectory() {
     if (ThEmptyDirectory) delete ThEmptyDirectory;
+    delete QSIMModel;
     delete ui;
 }
 
 void QDEmptyDirectory::OnEnd() {
     ui->QPBStop->click();
+    ui->QLVLog->scrollToBottom();
 }
 
 void QDEmptyDirectory::OnGenericEvent(int Type, int Int0, int Int1) {
@@ -27,13 +31,19 @@ void QDEmptyDirectory::OnGenericEvent(int Type, int Int0, int Int1) {
 }
 
 void QDEmptyDirectory::OnLog(int Type, QString Log) {
-    while (ui->QLWLog->count()> 1024) ui->QLWLog->takeItem(0);
-    ui->QLWLog->addItem(Log);
+    while (QSIMModel->rowCount()> 1024 * 8) QSIMModel->takeRow(0);
+    QSIMModel->setRowCount(QSIMModel->rowCount()+ 1);
+    QStandardItem *StandardItem0= new QStandardItem(Log);
     switch(Type) {
-        case LOG_TYPE_ERROR: ui->QLWLog->item(ui->QLWLog->count()-1)->setForeground(Qt::red); break;
-        default: ui->QLWLog->item(ui->QLWLog->count()-1)->setForeground(Qt::black); break;
+        case LOG_TYPE_ERROR: StandardItem0->setForeground(Qt::red); break;
+        default: break;
     }
-    ui->QLWLog->scrollToBottom();
+    QSIMModel->setItem(QSIMModel->rowCount()- 1, 0, StandardItem0);
+    ui->QLVLog->setModel(QSIMModel);
+}
+
+void QDEmptyDirectory::OnTimer() {
+    if (ThEmptyDirectory) ui->QLVLog->scrollToBottom();
 }
 
 void QDEmptyDirectory::on_QLEDirectory_textChanged(const QString &) {
@@ -60,11 +70,11 @@ void QDEmptyDirectory::on_QPBStart_clicked() {
 void QDEmptyDirectory::on_QPBStop_clicked() {
     ui->QPBStop->setEnabled(false);
     delete ThEmptyDirectory;
-    ThEmptyDirectory= NULL;
+    ThEmptyDirectory= nullptr;
     ui->QPBStart->setEnabled(true);
 }
 
 void QDEmptyDirectory::on_QTBDirectory_clicked() {
     QString Path= QFileDialog::getExistingDirectory(this, tr("Directory to empty"), "", QFileDialog::ShowDirsOnly);
-    if (Path!= NULL) ui->QLEDirectory->setText(Path);
+    if (Path.length()> 0) ui->QLEDirectory->setText(Path);
 }

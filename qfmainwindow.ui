@@ -627,7 +627,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QListWidget" name="QLWLog"/>
+               <widget class="QListView" name="QLVLog">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -812,7 +819,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>18</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAuthor">
@@ -885,7 +892,7 @@
   <tabstop>QLWExclusionList</tabstop>
   <tabstop>QTBExclusionListAdd</tabstop>
   <tabstop>QTBExclusionListRemove</tabstop>
-  <tabstop>QLWLog</tabstop>
+  <tabstop>QLVLog</tabstop>
   <tabstop>QCBSimulation</tabstop>
   <tabstop>QPBStart</tabstop>
   <tabstop>QPBStop</tabstop>

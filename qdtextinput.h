@@ -21,9 +21,9 @@
 #ifndef QDTEXTINPUT_H
 #define QDTEXTINPUT_H
 
+#include "ui_qdtextinput.h"
 #include <QDialog>
 #include "ui_qdtextinput.h"
-#include "commons.h"
 
 namespace Ui {
     class QDTextInput;
@@ -34,7 +34,7 @@ class QDTextInput : public QDialog
     Q_OBJECT
 
 public:
-    explicit QDTextInput(QWidget *parent = 0);
+    explicit QDTextInput(QWidget *parent = nullptr);
     ~QDTextInput();
     Ui::QDTextInput *ui;
 

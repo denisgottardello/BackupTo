@@ -82,7 +82,7 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                             QDir QDPathDestination;
                             if (!QDPathDestination.mkpath(QFIPathDestination.absoluteFilePath())) emit OnLog(LOG_TYPE_ERROR, tr("Error on create folder ")+ QFIPathDestination.absoluteFilePath());
                             else {
-                                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.created(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, tr("Error on change folder date time ")+ QFIPathDestination.absoluteFilePath());
+                                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.birthTime(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, tr("Error on change folder date time ")+ QFIPathDestination.absoluteFilePath());
                                 DirecoriesCopied++;
                                 emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
                                 emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath()+ tr(" created"));
@@ -124,14 +124,14 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                         QFile QFDestination(QFIPathDestination.absoluteFilePath());
                         if (QFSource.open(QIODevice::ReadOnly)) {
                             if (QFDestination.open(QIODevice::WriteOnly)) {
-                                quint64 Position= 0;
+                                qint64 Position= 0;
                                 emit OnGenericEvent(EVENT_TYPE_FILE_STATUS, 0, 0, 0, 0, "");
                                 emit OnGenericEvent(EVENT_TYPE_FILE, 0, 0, 0, 0, QFSource.fileName());
                                 QDateTime QDTLastEvent= QDateTime::currentDateTime();
                                 while(DoStart && !QFSource.atEnd()) {
                                     Position+= 4096;
                                     if (QDTLastEvent.msecsTo(QDateTime::currentDateTime())> 250) {
-                                        emit OnGenericEvent(EVENT_TYPE_FILE_STATUS, uint((Position * 100) / QFSource.size()), 0, 0, 0, "");
+                                        emit OnGenericEvent(EVENT_TYPE_FILE_STATUS, static_cast<int>((Position * 100) / QFSource.size()), 0, 0, 0, "");
                                         QDTLastEvent= QDateTime::currentDateTime();
                                     }
                                     QFDestination.write(QFSource.read(4096));
@@ -141,7 +141,7 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                                 QFDestination.close();
                                 FilesCopied++;
                                 emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.created(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, QFDestination.fileName()+ tr(" error on change file date time!"));
+                                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.birthTime(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, QFDestination.fileName()+ tr(" error on change file date time!"));
                                 else emit OnLog(LOG_TYPE_STANDARD, QFSource.fileName()+ tr(" copied"));
                             } else OnLog(LOG_TYPE_ERROR, QFSource.fileName()+ tr(" error on copy to ")+ QFDestination.fileName());
                             QFSource.close();

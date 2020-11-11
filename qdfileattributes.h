@@ -36,7 +36,7 @@ class QDFileAttributes : public QDialog
     Q_OBJECT
     
 public:
-    explicit QDFileAttributes(QWidget *parent = 0);
+    explicit QDFileAttributes(QWidget *parent = nullptr);
     ~QDFileAttributes();
     
 private slots:

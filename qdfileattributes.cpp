@@ -66,7 +66,7 @@ void QDFileAttributes::on_QPBSelectFile_clicked() {
 
 void QDFileAttributes::ReadAttributes() {
     QFileInfo QFIPathSource(ui->QLEFile->text());
-    ui->QDTECreation->setDateTime(QFIPathSource.created());
+    ui->QDTECreation->setDateTime(QFIPathSource.birthTime());
     ui->QDTELastAccess->setDateTime(QFIPathSource.lastRead());
     ui->QDTELastModified->setDateTime(QFIPathSource.lastModified());
     ui->QPBApply->setEnabled(false);

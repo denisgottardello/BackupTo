@@ -21,23 +21,23 @@
 #ifndef QFMAINWINDOW_H
 #define QFMAINWINDOW_H
 
-#include <QMainWindow>
 #include "commons.h"
-#include "QSettings"
+#include "qdfileattributes.h"
 #include "QDir"
+#include "qdemptydirectory.h"
 #include "qdtextinput.h"
-#include "QMessageBox"
 #include "QFileDialog"
+#include <QMainWindow>
 #include "QMenu"
-#include "QTimer"
+#include "QMessageBox"
+#include "QScreen"
+#include "QSettings"
 #include "QSystemTrayIcon"
+#include "QTimer"
 #ifndef THSYNCHRONIZE_H
     class QFMainWindow;
     #include "qthsynchronize.h"
 #endif
-#include "qdfileattributes.h"
-#include "qdemptydirectory.h"
-#include "QScreen"
 
 namespace Ui {
 class QFMainWindow;
@@ -48,15 +48,12 @@ class QFMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QFMainWindow(QWidget *parent = 0);
+    explicit QFMainWindow(QWidget *parent = nullptr);
     ~QFMainWindow();
 
 private slots:
     void AddFiles();
     void AddDirectories();
-    void OnEnd();
-    void OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0);
-    void OnLog(int Type, QString Log);
     void on_QAAuthor_triggered();
     void on_QADirectoryEmpty_triggered();
     void on_QAFileAttributesChange_triggered();
@@ -84,6 +81,10 @@ private slots:
     void on_QRBSideBToSideA_toggled(bool checked);
     void on_QTBSideA_clicked();
     void on_QTBSideB_clicked();
+    void OnEnd();
+    void OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0);
+    void OnLog(int Type, QString Log);
+    void OnTimer();
     void Remove();
     void UpdateIcons();
 
@@ -91,9 +92,10 @@ private:
     Ui::QFMainWindow *ui;
     bool UpdateInAction;
     int LastIcon;
-    QSystemTrayIcon *QSTITrayIcon;
-    QThSynchronize *ThSynchronize;
-    QTimer QTIcons;
+    QSystemTrayIcon *QSTITrayIcon= nullptr;
+    QStandardItemModel *QSIMModel= nullptr;
+    QThSynchronize *ThSynchronize= nullptr;
+    QTimer QTIcons, Timer;
     QVector<Profile> QVProfiles;
 
 };

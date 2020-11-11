@@ -23,6 +23,7 @@
 
 QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QFMainWindow) {
     ui->setupUi(this);
+    QSIMModel= new QStandardItemModel(this);
     QMenu *QMAdd= new QMenu(this);
     QMenu *QMRemove= new QMenu(this);
     QAction *QAAddDirectories= new QAction(tr("Add directories"), this);
@@ -58,7 +59,6 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
     QSTITrayIcon->show();
     LastIcon= 0;
     UpdateInAction= false;
-    ThSynchronize= NULL;
     ui->QPBFile->hide();
     ui->QLFile->hide();
     QTIcons.setInterval(100);
@@ -91,6 +91,8 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
     }{
         delete QSSettings;
     }
+    connect(&Timer, SIGNAL(timeout()), this, SLOT(OnTimer()));
+    Timer.start(500);
     ui->splitter->setStretchFactor(0, 0);
     ui->splitter->setStretchFactor(1, 1);
     QRect Rect= QApplication::screens().at(0)->geometry();
@@ -99,6 +101,7 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
 
 QFMainWindow::~QFMainWindow() {
     if (ThSynchronize) delete ThSynchronize;
+    delete QSIMModel;
     delete QSTITrayIcon;
     delete ui;
 }
@@ -125,40 +128,6 @@ void QFMainWindow::AddDirectories() {
         ui->QLWExclusionList->addItems(QVProfiles.at(ui->QLWProfiles->currentRow()).QSLExclusionFiles);
         ui->QPBSave->setEnabled(true);
     }
-}
-
-void QFMainWindow::OnEnd() {
-    ui->QPBStop->click();
-}
-
-void QFMainWindow::OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0) {
-    switch(Type) {
-        case EVENT_TYPE_FILE: {
-            ui->QLFile->setText(String0);
-            break;
-        }
-        case EVENT_TYPE_FILE_STATUS: {
-            ui->QPBFile->setValue(Int0);
-            break;
-        }
-        case EVENT_TYPE_JOB_STATUS: {
-            ui->QLCDNDirectoriesCopied->display(Int1);
-            ui->QLCDNDirectorieDeleted->display(Int3);
-            ui->QLCDNFilesCopied->display(Int0);
-            ui->QLCDNFilesDeleted->display(Int2);
-            break;
-        }
-    }
-}
-
-void QFMainWindow::OnLog(int Type, QString Log) {
-    while (ui->QLWLog->count()> 1024) ui->QLWLog->takeItem(0);
-    ui->QLWLog->addItem(Log);
-    switch(Type) {
-        case LOG_TYPE_ERROR: ui->QLWLog->item(ui->QLWLog->count()-1)->setForeground(Qt::red); break;
-        default: ui->QLWLog->item(ui->QLWLog->count()-1)->setForeground(Qt::black); break;
-    }
-    ui->QLWLog->scrollToBottom();
 }
 
 void QFMainWindow::on_QAAuthor_triggered() {
@@ -190,7 +159,7 @@ void QFMainWindow::on_QAQuit_triggered() {
 }
 
 void QFMainWindow::on_QAVersion_triggered() {
-    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ ("1.0.7.0"), "Ok");
+    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ ("1.0.8.0"), "Ok");
 }
 
 void QFMainWindow::on_QCBDeleteFilesOnTargetSide_toggled(bool checked) {
@@ -258,7 +227,8 @@ void QFMainWindow::on_QLWExclusionList_currentRowChanged(int currentRow) {
 }
 
 void QFMainWindow::on_QPBClear_clicked() {
-    ui->QLWLog->clear();
+    QSIMModel->clear();
+    ui->QLVLog->setModel(QSIMModel);
     ui->QLCDNDirectoriesCopied->display(0);
     ui->QLCDNDirectorieDeleted->display(0);
     ui->QLCDNFilesCopied->display(0);
@@ -342,7 +312,7 @@ void QFMainWindow::on_QPBStart_clicked() {
 void QFMainWindow::on_QPBStop_clicked() {
     ui->QPBStop->setEnabled(false);
     delete ThSynchronize;
-    ThSynchronize= NULL;
+    ThSynchronize= nullptr;
     QTIcons.stop();
     QSTITrayIcon->setIcon(this->windowIcon());
     ui->QLUpdate->clear();
@@ -376,7 +346,7 @@ void QFMainWindow::on_QRBSideBToSideA_toggled(bool checked) {
 void QFMainWindow::on_QTBSideA_clicked() {
     UpdateInAction= true;
     QString Path= QFileDialog::getExistingDirectory(this, tr("Side A"), QVProfiles[ui->QLWProfiles->row(ui->QLWProfiles->currentItem())].SideA, QFileDialog::ShowDirsOnly);
-    if (Path!= NULL) {
+    if (Path.length()> 0) {
         QVProfiles[ui->QLWProfiles->currentRow()].SideA= Path;
         ui->QLESideA->setText(QVProfiles.at(ui->QLWProfiles->currentRow()).SideA);
         ui->QPBSave->setEnabled(true);
@@ -387,12 +357,53 @@ void QFMainWindow::on_QTBSideA_clicked() {
 void QFMainWindow::on_QTBSideB_clicked() {
     UpdateInAction= true;
     QString Path= QFileDialog::getExistingDirectory(this, tr("Side B"), QVProfiles[ui->QLWProfiles->row(ui->QLWProfiles->currentItem())].SideB, QFileDialog::ShowDirsOnly);
-    if (Path!= NULL) {
+    if (Path.length()> 0) {
         QVProfiles[ui->QLWProfiles->currentRow()].SideB= Path;
         ui->QLESideB->setText(QVProfiles.at(ui->QLWProfiles->currentRow()).SideB);
         ui->QPBSave->setEnabled(true);
     }
     UpdateInAction= false;
+}
+
+void QFMainWindow::OnEnd() {
+    ui->QPBStop->click();
+    ui->QLVLog->scrollToBottom();
+}
+
+void QFMainWindow::OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0) {
+    switch(Type) {
+        case EVENT_TYPE_FILE: {
+            ui->QLFile->setText(String0);
+            break;
+        }
+        case EVENT_TYPE_FILE_STATUS: {
+            ui->QPBFile->setValue(Int0);
+            break;
+        }
+        case EVENT_TYPE_JOB_STATUS: {
+            ui->QLCDNDirectoriesCopied->display(Int1);
+            ui->QLCDNDirectorieDeleted->display(Int3);
+            ui->QLCDNFilesCopied->display(Int0);
+            ui->QLCDNFilesDeleted->display(Int2);
+            break;
+        }
+    }
+}
+
+void QFMainWindow::OnLog(int Type, QString Log) {
+    while (QSIMModel->rowCount()> 1024 * 8) QSIMModel->takeRow(0);
+    QSIMModel->setRowCount(QSIMModel->rowCount()+ 1);
+    QStandardItem *StandardItem0= new QStandardItem(Log);
+    switch(Type) {
+        case LOG_TYPE_ERROR: StandardItem0->setForeground(Qt::red); break;
+        default: break;
+    }
+    QSIMModel->setItem(QSIMModel->rowCount()- 1, 0, StandardItem0);
+    ui->QLVLog->setModel(QSIMModel);
+}
+
+void QFMainWindow::OnTimer() {
+    if (ThSynchronize) ui->QLVLog->scrollToBottom();
 }
 
 void QFMainWindow::Remove() {
