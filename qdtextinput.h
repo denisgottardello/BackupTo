@@ -21,7 +21,6 @@
 #ifndef QDTEXTINPUT_H
 #define QDTEXTINPUT_H
 
-#include "ui_qdtextinput.h"
 #include <QDialog>
 #include "ui_qdtextinput.h"
 

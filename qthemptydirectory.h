@@ -21,14 +21,10 @@
 #ifndef THEMPTYDIRECTORY_H
 #define THEMPTYDIRECTORY_H
 
-#include <QThread>
+#include "commons.h"
 #include "QDir"
 #include "QFile"
-
-#define EVENT_TYPE_JOB_STATUS 2
-
-#define LOG_TYPE_ERROR 0
-#define LOG_TYPE_STANDARD 1
+#include <QThread>
 
 class QThEmptyDirectory : public QThread
 {
@@ -40,13 +36,13 @@ public:
 
 signals:
     void OnEnd();
-    void OnGenericEvent(int Type, int Int0, int Int1);
-    void OnLog(int Type, QString Log);
+    void OnGenericEvent(EventTypes EventType, int Int0, int Int1);
+    void OnLog(LogTypes Type, QString Log);
 
 private:
     void run();
-    bool DoStart;
-    int FilesDeleted, DirectoriesDeleted;
+    bool DoStart= true;
+    int FilesDeleted= 0, DirectoriesDeleted= 0;
     QString Path;
     void EmptyDirectory(QString Path);
 

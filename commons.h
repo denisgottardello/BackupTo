@@ -21,29 +21,36 @@
 #ifndef COMMONS_H
 #define COMMONS_H
 
-#include "QString"
-#include "QStringList"
-#ifdef Q_OS_WIN
-    #include "windows.h"
-#else
-    #include <utime.h>
-#endif
 #include "QDateTime"
+#include "QFileInfo"
+#include "QStringList"
 
-#define SIDEA_SIDEB_MERGE 0
-#define SIDEA_TO_SIDEB 1
-#define SIDEB_TO_SIDEA 2
+#define VERSION QString("1.0.9.0")
+
+enum EventTypes {
+    EVENT_TYPE_FILE,
+    EVENT_TYPE_FILE_STATUS,
+    EVENT_TYPE_JOB_STATUS,
+};
+
+enum LogTypes {
+    LOG_TYPE_ERROR,
+    LOG_TYPE_STANDARD,
+};
+
+enum Sides {
+    SIDEA_SIDEB_MERGE= 0,
+    SIDEA_TO_SIDEB= 1,
+    SIDEB_TO_SIDEA= 2,
+};
 
 struct Profile {
     bool IgnoreFileDate, DeleteFilesOnTargetSide;
-    int Direction;
+    Sides Direction;
     QString Description, SideA, SideB;
     QStringList QSLExclusionFiles;
 };
 
 bool SetFileDateTime(QString FileOut, QDateTime QDTCreation, QDateTime QDTLastAccess, QDateTime QDTLastWrite);
-#ifdef Q_OS_WIN
-    FILETIME ToWindowsFileTime(const QDateTime QDTValue);
-#endif
 
 #endif // COMMONS_H

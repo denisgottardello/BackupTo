@@ -21,11 +21,11 @@
 #ifndef QDFILEATTRIBUTES_H
 #define QDFILEATTRIBUTES_H
 
-#include <QDialog>
-#include "QDateTime"
 #include "commons.h"
-#include "QMessageBox"
+#include "QDateTime"
+#include <QDialog>
 #include "QFileDialog"
+#include "QMessageBox"
 
 namespace Ui {
 class QDFileAttributes;

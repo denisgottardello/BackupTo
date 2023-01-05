@@ -22,8 +22,6 @@
 
 QThEmptyDirectory::QThEmptyDirectory(QString Path) : QThread() {
     this->Path= Path;
-    DoStart= true;
-    FilesDeleted= DirectoriesDeleted= 0;
 }
 
 QThEmptyDirectory::~QThEmptyDirectory() {

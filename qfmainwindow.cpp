@@ -19,11 +19,12 @@
 ***************************************************************************/
 
 #include "qfmainwindow.h"
-#include "ui_qfmainwindow.h"
 
 QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QFMainWindow) {
     ui->setupUi(this);
-    QSIMModel= new QStandardItemModel(this);
+    qRegisterMetaType<EventTypes>("EventTypes");
+    qRegisterMetaType<LogTypes>("LogTypes");
+    pQStandardItemModel= new QStandardItemModel(this);
     QMenu *QMAdd= new QMenu(this);
     QMenu *QMRemove= new QMenu(this);
     QAction *QAAddDirectories= new QAction(tr("Add directories"), this);
@@ -51,12 +52,12 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
     QMTrayIcon->addAction(QARestore);
     QMTrayIcon->addSeparator();
     QMTrayIcon->addAction(QAQuit);
-    QSTITrayIcon= new QSystemTrayIcon(this);
-    QSTITrayIcon->setToolTip(this->windowTitle());
-    QSTITrayIcon->setIcon(this->windowIcon());
-    QSTITrayIcon->setContextMenu(QMTrayIcon);
-    QSTITrayIcon->setIcon(this->windowIcon());
-    QSTITrayIcon->show();
+    pQSystemTrayIcon= new QSystemTrayIcon(this);
+    pQSystemTrayIcon->setToolTip(this->windowTitle());
+    pQSystemTrayIcon->setIcon(this->windowIcon());
+    pQSystemTrayIcon->setContextMenu(QMTrayIcon);
+    pQSystemTrayIcon->setIcon(this->windowIcon());
+    pQSystemTrayIcon->show();
     LastIcon= 0;
     UpdateInAction= false;
     ui->QPBFile->hide();
@@ -70,7 +71,7 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
             Profile profile;
             profile.Description= QSSettings->value("Description"+ QString::number(count), "").toString();
             profile.DeleteFilesOnTargetSide= QSSettings->value("DeleteFilesOnTargetSide"+ QString::number(count), "true").toBool();
-            profile.Direction= QSSettings->value("Direction"+ QString::number(count), "0").toInt();
+            profile.Direction= static_cast<Sides>(QSSettings->value("Direction"+ QString::number(count), SIDEA_SIDEB_MERGE).toInt());
             profile.IgnoreFileDate= QSSettings->value("IgnoreFileDate"+ QString::number(count), "false").toBool();
             profile.SideA= QSSettings->value("SideA"+ QString::number(count), "").toString();
             profile.SideB= QSSettings->value("SideB"+ QString::number(count), "").toString();
@@ -97,12 +98,16 @@ QFMainWindow::QFMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::QF
     ui->splitter->setStretchFactor(1, 1);
     QRect Rect= QApplication::screens().at(0)->geometry();
     move(Rect.center()- rect().center());
+    pQNetworkAccessManager= new QNetworkAccessManager(this);
+    connect(pQNetworkAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
+    pQNetworkAccessManager->get(QNetworkRequest(QUrl("http://www.denisgottardello.it/BackupTo/BackupToVersion.txt")));
 }
 
 QFMainWindow::~QFMainWindow() {
-    if (ThSynchronize) delete ThSynchronize;
-    delete QSIMModel;
-    delete QSTITrayIcon;
+    if (pQNetworkAccessManager) delete pQNetworkAccessManager;
+    if (pQThSynchronize) delete pQThSynchronize;
+    delete pQStandardItemModel;
+    delete pQSystemTrayIcon;
     delete ui;
 }
 
@@ -130,24 +135,28 @@ void QFMainWindow::AddDirectories() {
     }
 }
 
+void QFMainWindow::finished(QNetworkReply *reply) {
+    if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt()== 200) {
+        if (QString(reply->readAll().trimmed()).compare(VERSION)!= 0) {
+            if (QMessageBox::information(this, tr("Info"), tr("New version available. Do you want to open the BackupTo download page?"), QMessageBox::Yes | QMessageBox::No)== QMessageBox::Yes) {
+                QDesktopServices::openUrl(QUrl("http://www.denisgottardello.it/BackupTo"));
+            }
+        }
+    }
+}
+
 void QFMainWindow::on_QAAuthor_triggered() {
     QMessageBox::information(this, "Info", "Denis Gottardello\nwww.denisgottardello.it\ninfo@denisgottardello.it", "Ok");
 }
 
 void QFMainWindow::on_QADirectoryEmpty_triggered() {
-    QDEmptyDirectory *EmptyDirectory= new QDEmptyDirectory(this); {
-        EmptyDirectory->exec();
-    }{
-        delete EmptyDirectory;
-    }
+    QDEmptyDirectory EmptyDirectory(this);
+    EmptyDirectory.exec();
 }
 
 void QFMainWindow::on_QAFileAttributesChange_triggered() {
-    QDFileAttributes *FileAttributes= new QDFileAttributes(this); {
-        FileAttributes->exec();
-    }{
-        delete FileAttributes;
-    }
+    QDFileAttributes FileAttributes(this);
+    FileAttributes.exec();
 }
 
 void QFMainWindow::on_QAQtVersion_triggered() {
@@ -159,7 +168,7 @@ void QFMainWindow::on_QAQuit_triggered() {
 }
 
 void QFMainWindow::on_QAVersion_triggered() {
-    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ ("1.0.8.0"), "Ok");
+    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ VERSION, "Ok");
 }
 
 void QFMainWindow::on_QCBDeleteFilesOnTargetSide_toggled(bool checked) {
@@ -180,6 +189,17 @@ void QFMainWindow::on_QLESideA_textChanged(const QString &) {
 
 void QFMainWindow::on_QLESideB_textChanged(const QString &) {
     on_QRBSideAEqualToSideB_toggled(false);
+}
+
+void QFMainWindow::on_QLVLog_doubleClicked(const QModelIndex &index) {
+    if (pQStandardItemModel->item(index.row(), index.column())->text().contains("[") && pQStandardItemModel->item(index.row(), index.column())->text().contains("]")) {
+        QString Value= pQStandardItemModel->item(index.row(), index.column())->text().midRef(pQStandardItemModel->item(index.row(), index.column())->text().indexOf("[")).toString();
+        Value= pQStandardItemModel->item(index.row(), index.column())->text().midRef(1, pQStandardItemModel->item(index.row(), index.column())->text().indexOf("]")- 1).toString();
+        if (Value.length()> 0) {
+            QFileInfo FileInfo(Value);
+            QDesktopServices::openUrl(QUrl("file:///"+ FileInfo.absoluteDir().absolutePath()));
+        }
+    }
 }
 
 void QFMainWindow::on_QLWProfiles_clicked(const QModelIndex &index) {
@@ -227,8 +247,8 @@ void QFMainWindow::on_QLWExclusionList_currentRowChanged(int currentRow) {
 }
 
 void QFMainWindow::on_QPBClear_clicked() {
-    QSIMModel->clear();
-    ui->QLVLog->setModel(QSIMModel);
+    pQStandardItemModel->clear();
+    ui->QLVLog->setModel(pQStandardItemModel);
     ui->QLCDNDirectoriesCopied->display(0);
     ui->QLCDNDirectorieDeleted->display(0);
     ui->QLCDNFilesCopied->display(0);
@@ -236,13 +256,13 @@ void QFMainWindow::on_QPBClear_clicked() {
 }
 
 void QFMainWindow::on_QPBProfileAdd_clicked() {
-    QDTextInput textinput;
-    textinput.ui->QLTextInput->setText(tr("Profile"));
-    textinput.setWindowTitle(tr("New profile"));
-    if (textinput.exec()== QDialog::Accepted) {
+    QDTextInput TextInput(this);
+    TextInput.ui->QLTextInput->setText(tr("Profile"));
+    TextInput.setWindowTitle(tr("New profile"));
+    if (TextInput.exec()== QDialog::Accepted) {
         Profile profile;
         profile.DeleteFilesOnTargetSide= true;
-        profile.Description= textinput.ui->QLETextInput->text();
+        profile.Description= TextInput.ui->QLETextInput->text();
         profile.Direction= SIDEA_TO_SIDEB;
         profile.IgnoreFileDate= false;
         ui->QLWProfiles->addItem(profile.Description);
@@ -301,20 +321,20 @@ void QFMainWindow::on_QPBStart_clicked() {
     ui->QLFile->clear();
     ui->QLFile->show();
     QTIcons.start();
-    ThSynchronize= new QThSynchronize(QVProfiles.at(ui->QLWProfiles->currentRow()), ui->QCBSimulation->isChecked());
-    connect(ThSynchronize, SIGNAL(OnEnd()), this, SLOT(OnEnd()), Qt::QueuedConnection);
-    connect(ThSynchronize, SIGNAL(OnGenericEvent(int,int,int,int,int,QString)), this, SLOT(OnGenericEvent(int,int,int,int,int,QString)));
-    connect(ThSynchronize, SIGNAL(OnLog(int,QString)), this, SLOT(OnLog(int,QString)), Qt::QueuedConnection);
-    ThSynchronize->start();
+    pQThSynchronize= new QThSynchronize(QVProfiles.at(ui->QLWProfiles->currentRow()), ui->QCBSimulation->isChecked());
+    connect(pQThSynchronize, SIGNAL(OnEnd()), this, SLOT(OnEnd()), Qt::QueuedConnection);
+    connect(pQThSynchronize, SIGNAL(OnGenericEvent(EventTypes,int,int,int,int,QString)), this, SLOT(OnGenericEvent(EventTypes,int,int,int,int,QString)), Qt::QueuedConnection);
+    connect(pQThSynchronize, SIGNAL(OnLog(LogTypes,QString)), this, SLOT(OnLog(LogTypes,QString)), Qt::QueuedConnection);
+    pQThSynchronize->start();
     ui->QPBStop->setEnabled(true);
 }
 
 void QFMainWindow::on_QPBStop_clicked() {
     ui->QPBStop->setEnabled(false);
-    delete ThSynchronize;
-    ThSynchronize= nullptr;
+    delete pQThSynchronize;
+    pQThSynchronize= nullptr;
     QTIcons.stop();
-    QSTITrayIcon->setIcon(this->windowIcon());
+    pQSystemTrayIcon->setIcon(this->windowIcon());
     ui->QLUpdate->clear();
     ui->QPBFile->hide();
     ui->QLFile->hide();
@@ -370,8 +390,8 @@ void QFMainWindow::OnEnd() {
     ui->QLVLog->scrollToBottom();
 }
 
-void QFMainWindow::OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0) {
-    switch(Type) {
+void QFMainWindow::OnGenericEvent(EventTypes EventType, int Int0, int Int1, int Int2, int Int3, QString String0) {
+    switch(EventType) {
         case EVENT_TYPE_FILE: {
             ui->QLFile->setText(String0);
             break;
@@ -390,20 +410,24 @@ void QFMainWindow::OnGenericEvent(int Type, int Int0, int Int1, int Int2, int In
     }
 }
 
-void QFMainWindow::OnLog(int Type, QString Log) {
-    while (QSIMModel->rowCount()> 1024 * 8) QSIMModel->takeRow(0);
-    QSIMModel->setRowCount(QSIMModel->rowCount()+ 1);
+void QFMainWindow::OnLog(LogTypes Type, QString Log) {
+    while (pQStandardItemModel->rowCount()> 1024 * 8) pQStandardItemModel->takeRow(0);
+    pQStandardItemModel->setRowCount(pQStandardItemModel->rowCount()+ 1);
     QStandardItem *StandardItem0= new QStandardItem(Log);
     switch(Type) {
-        case LOG_TYPE_ERROR: StandardItem0->setForeground(Qt::red); break;
-        default: break;
+        case LOG_TYPE_ERROR: {
+            StandardItem0->setForeground(Qt::red);
+            break;
+        }
+        default:
+            break;
     }
-    QSIMModel->setItem(QSIMModel->rowCount()- 1, 0, StandardItem0);
-    ui->QLVLog->setModel(QSIMModel);
+    pQStandardItemModel->setItem(pQStandardItemModel->rowCount()- 1, 0, StandardItem0);
+    ui->QLVLog->setModel(pQStandardItemModel);
 }
 
 void QFMainWindow::OnTimer() {
-    if (ThSynchronize) ui->QLVLog->scrollToBottom();
+    if (pQThSynchronize) ui->QLVLog->scrollToBottom();
 }
 
 void QFMainWindow::Remove() {
@@ -418,13 +442,13 @@ void QFMainWindow::Remove() {
 
 void QFMainWindow::UpdateIcons() {
     switch (LastIcon) {
-        case 0: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/00.png")))); break;
-        case 1: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/01.png")))); break;
-        case 2: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/02.png")))); break;
-        case 3: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/03.png")))); break;
-        case 4: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/04.png")))); break;
-        case 5: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/05.png")))); break;
-        case 6: QSTITrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/06.png")))); break;
+        case 0: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/00.png")))); break;
+        case 1: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/01.png")))); break;
+        case 2: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/02.png")))); break;
+        case 3: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/03.png")))); break;
+        case 4: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/04.png")))); break;
+        case 5: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/05.png")))); break;
+        case 6: pQSystemTrayIcon->setIcon(QIcon(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/06.png")))); break;
     }
     switch (LastIcon) {
         case 0: ui->QLUpdate->setPixmap(QPixmap(QString::fromUtf8(":/IconsWait/IconsWait/00.png"))); break;

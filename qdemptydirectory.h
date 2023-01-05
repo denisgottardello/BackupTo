@@ -27,15 +27,15 @@ private slots:
     void on_QPBStop_clicked();
     void on_QTBDirectory_clicked();
     void OnEnd();
-    void OnGenericEvent(int Type, int Int0, int Int1);
-    void OnLog(int Type, QString Log);
+    void OnGenericEvent(EventTypes EventType, int Int0, int Int1);
+    void OnLog(LogTypes Type, QString Log);
     void OnTimer();
 
 private:
     Ui::QDEmptyDirectory *ui;
     QTimer Timer;
-    QStandardItemModel *QSIMModel= nullptr;
-    QThEmptyDirectory *ThEmptyDirectory= nullptr;
+    QStandardItemModel *pQStandardItemModel= nullptr;
+    QThEmptyDirectory *pQThEmptyDirectory= nullptr;
 
 };
 

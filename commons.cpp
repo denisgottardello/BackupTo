@@ -22,39 +22,14 @@
 
 bool SetFileDateTime(QString FileOut, QDateTime QDTCreation, QDateTime QDTLastAccess, QDateTime QDTLastWrite) {
     bool Result= false;
-    #ifdef Q_OS_WIN
-        LPCWSTR lpFileName= (const wchar_t*)FileOut.utf16();
-        HANDLE hFile= CreateFile(lpFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-        if (hFile== INVALID_HANDLE_VALUE) Result= false;
-        else {
-            CONST FILETIME lpCreationTime= ToWindowsFileTime(QDTCreation);
-            CONST FILETIME lpLastAccessTime= ToWindowsFileTime(QDTLastAccess);
-            CONST FILETIME lpLastWriteTime= ToWindowsFileTime(QDTLastWrite);
-            Result= SetFileTime(hFile, &lpCreationTime, &lpLastAccessTime, &lpLastWriteTime);
-            CloseHandle(hFile);
-        }
-    #else
-        struct utimbuf NewTime;
-        NewTime.actime= QDTLastAccess.toTime_t();
-        NewTime.modtime= QDTLastWrite.toTime_t();
-        if (utime(FileOut.toStdString().c_str(), &NewTime)< 0) Result= false;
-        else Result= true;
-    #endif
+    QFile QFFileOut(FileOut);
+    if (QFFileOut.open(QIODevice::WriteOnly | QFile::Append)) {
+        if (QFFileOut.setFileTime(QDTLastAccess, QFileDevice::FileAccessTime)
+                #ifdef Q_OS_WIN
+                    && QFFileOut.setFileTime(QDTCreation, QFileDevice::FileBirthTime)
+                #endif
+                && QFFileOut.setFileTime(QDTLastWrite, QFileDevice::FileModificationTime)) Result= true;
+        QFFileOut.close();
+    }
     return Result;
 }
-
-#ifdef Q_OS_WIN
-    FILETIME ToWindowsFileTime(const QDateTime QDTValue) {
-        // Definition of FILETIME from MSDN:
-        // Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
-        QDateTime origin(QDate(1601, 1, 1), QTime(0, 0, 0, 0), Qt::UTC);
-        // Get offset - note we need 100-nanosecond intervals, hence we multiply by
-        // 10000.
-        qint64 _100nanosecs = 10000 * origin.msecsTo(QDTValue);
-        // Pack _100nanosecs into the structure.
-        FILETIME fileTime;
-        fileTime.dwLowDateTime = _100nanosecs;
-        fileTime.dwHighDateTime = (_100nanosecs >> 32);
-        return fileTime;
-    }
-#endif

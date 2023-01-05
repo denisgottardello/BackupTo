@@ -21,17 +21,10 @@
 #ifndef THSYNCHRONIZE_H
 #define THSYNCHRONIZE_H
 
-#include <QThread>
-#include "QDebug"
 #include "commons.h"
+#include "QDebug"
 #include "QDir"
-
-#define EVENT_TYPE_FILE 0
-#define EVENT_TYPE_FILE_STATUS 1
-#define EVENT_TYPE_JOB_STATUS 2
-
-#define LOG_TYPE_ERROR 0
-#define LOG_TYPE_STANDARD 1
+#include <QThread>
 
 class QThSynchronize : public QThread
 {
@@ -43,13 +36,14 @@ public:
 
 signals:
     void OnEnd();
-    void OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0);
-    void OnLog(int Type, QString Log);
+    void OnGenericEvent(EventTypes EventType, int Int0, int Int1, int Int2, int Int3, QString String0);
+    void OnLog(LogTypes Type, QString Log);
 
 private:
-    bool DoStart, Simulation;
-    int FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted;
+    bool DoStart= true, Simulation;
+    int FilesCopied= 0, DirecoriesCopied= 0, FilesDeleted= 0, DirectoriesDeleted= 0;
     Profile profile;
+    bool FileCopy(QFileInfo &QFIPathSource, QFileInfo &QFIPathDestination);
     void DirectoryCheckToCopy(QString Source, QString Destination, QString Path, bool IgnoreFileDate, bool OnlyIfBest);
     void DirectoryCheckToDelete(QString Source, QString Destination, QString Path);
     void run();

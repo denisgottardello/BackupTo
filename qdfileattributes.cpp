@@ -55,7 +55,7 @@ void QDFileAttributes::on_QPBClose_clicked() {
 }
 
 void QDFileAttributes::on_QPBSelectFile_clicked() {
-    QFileDialog FileDialog;
+    QFileDialog FileDialog(this);
     FileDialog.setViewMode(QFileDialog::Detail);
     FileDialog.setDirectory(QFileInfo(ui->QLEFile->text()).dir().absolutePath());
     if (FileDialog.exec()== QDialog::Accepted) {

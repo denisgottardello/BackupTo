@@ -3,15 +3,15 @@
 
 QDEmptyDirectory::QDEmptyDirectory(QWidget *parent) : QDialog(parent), ui(new Ui::QDEmptyDirectory) {
     ui->setupUi(this);
-    QSIMModel= new QStandardItemModel(this);
+    pQStandardItemModel= new QStandardItemModel(this);
     connect(&Timer, SIGNAL(timeout()), this, SLOT(OnTimer()));
     Timer.start(500);
     move(parent->window()->mapToGlobal(parent->window()->rect().center())- mapToGlobal(rect().center()));
 }
 
 QDEmptyDirectory::~QDEmptyDirectory() {
-    if (ThEmptyDirectory) delete ThEmptyDirectory;
-    delete QSIMModel;
+    if (pQThEmptyDirectory) delete pQThEmptyDirectory;
+    delete pQStandardItemModel;
     delete ui;
 }
 
@@ -20,30 +20,32 @@ void QDEmptyDirectory::OnEnd() {
     ui->QLVLog->scrollToBottom();
 }
 
-void QDEmptyDirectory::OnGenericEvent(int Type, int Int0, int Int1) {
-    switch(Type) {
+void QDEmptyDirectory::OnGenericEvent(EventTypes EventType, int Int0, int Int1) {
+    switch(EventType) {
         case EVENT_TYPE_JOB_STATUS: {
             ui->QLCDNDirectorieDeleted->display(Int1);
             ui->QLCDNFilesDeleted->display(Int0);
             break;
         }
+        default:
+            break;
     }
 }
 
-void QDEmptyDirectory::OnLog(int Type, QString Log) {
-    while (QSIMModel->rowCount()> 1024 * 8) QSIMModel->takeRow(0);
-    QSIMModel->setRowCount(QSIMModel->rowCount()+ 1);
+void QDEmptyDirectory::OnLog(LogTypes Type, QString Log) {
+    while (pQStandardItemModel->rowCount()> 1024 * 8) pQStandardItemModel->takeRow(0);
+    pQStandardItemModel->setRowCount(pQStandardItemModel->rowCount()+ 1);
     QStandardItem *StandardItem0= new QStandardItem(Log);
     switch(Type) {
         case LOG_TYPE_ERROR: StandardItem0->setForeground(Qt::red); break;
         default: break;
     }
-    QSIMModel->setItem(QSIMModel->rowCount()- 1, 0, StandardItem0);
-    ui->QLVLog->setModel(QSIMModel);
+    pQStandardItemModel->setItem(pQStandardItemModel->rowCount()- 1, 0, StandardItem0);
+    ui->QLVLog->setModel(pQStandardItemModel);
 }
 
 void QDEmptyDirectory::OnTimer() {
-    if (ThEmptyDirectory) ui->QLVLog->scrollToBottom();
+    if (pQThEmptyDirectory) ui->QLVLog->scrollToBottom();
 }
 
 void QDEmptyDirectory::on_QLEDirectory_textChanged(const QString &) {
@@ -58,19 +60,19 @@ void QDEmptyDirectory::on_QPBClose_clicked() {
 void QDEmptyDirectory::on_QPBStart_clicked() {
     if (QMessageBox::question(this, tr("Warning!"), tr("Are you sure?"), QMessageBox::Yes | QMessageBox::No)== QMessageBox::Yes) {
         ui->QPBStart->setEnabled(false);
-        ThEmptyDirectory= new QThEmptyDirectory(ui->QLEDirectory->text());
-        connect(ThEmptyDirectory, SIGNAL(OnEnd()), this, SLOT(OnEnd()), Qt::QueuedConnection);
-        connect(ThEmptyDirectory, SIGNAL(OnGenericEvent(int,int,int)), this, SLOT(OnGenericEvent(int,int,int)));
-        connect(ThEmptyDirectory, SIGNAL(OnLog(int,QString)), this, SLOT(OnLog(int,QString)), Qt::QueuedConnection);
-        ThEmptyDirectory->start();
+        pQThEmptyDirectory= new QThEmptyDirectory(ui->QLEDirectory->text());
+        connect(pQThEmptyDirectory, SIGNAL(OnEnd()), this, SLOT(OnEnd()), Qt::QueuedConnection);
+        connect(pQThEmptyDirectory, SIGNAL(OnGenericEvent(EventTypes,int,int)), this, SLOT(OnGenericEvent(EventTypes,int,int)), Qt::QueuedConnection);
+        connect(pQThEmptyDirectory, SIGNAL(OnLog(LogTypes,QString)), this, SLOT(OnLog(LogTypes,QString)), Qt::QueuedConnection);
+        pQThEmptyDirectory->start();
         ui->QPBStop->setEnabled(true);
     }
 }
 
 void QDEmptyDirectory::on_QPBStop_clicked() {
     ui->QPBStop->setEnabled(false);
-    delete ThEmptyDirectory;
-    ThEmptyDirectory= nullptr;
+    delete pQThEmptyDirectory;
+    pQThEmptyDirectory= nullptr;
     ui->QPBStart->setEnabled(true);
 }
 

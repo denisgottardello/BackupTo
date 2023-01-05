@@ -25,15 +25,19 @@
 #include "qdfileattributes.h"
 #include "QDir"
 #include "qdemptydirectory.h"
+#include "QDesktopServices"
 #include "qdtextinput.h"
 #include "QFileDialog"
 #include <QMainWindow>
 #include "QMenu"
 #include "QMessageBox"
+#include "QNetworkAccessManager"
+#include "QNetworkReply"
 #include "QScreen"
 #include "QSettings"
 #include "QSystemTrayIcon"
 #include "QTimer"
+#include "ui_qfmainwindow.h"
 #ifndef THSYNCHRONIZE_H
     class QFMainWindow;
     #include "qthsynchronize.h"
@@ -65,6 +69,7 @@ private slots:
     void on_QLEDescription_textChanged(const QString &arg1);
     void on_QLESideA_textChanged(const QString &arg1);
     void on_QLESideB_textChanged(const QString &arg1);
+    void on_QLVLog_doubleClicked(const QModelIndex &index);
     void on_QLWProfiles_clicked(const QModelIndex &index);
     void on_QLWProfiles_currentRowChanged(int currentRow);
     void on_QLWExclusionList_clicked(const QModelIndex &index);
@@ -81,9 +86,10 @@ private slots:
     void on_QRBSideBToSideA_toggled(bool checked);
     void on_QTBSideA_clicked();
     void on_QTBSideB_clicked();
+    void finished(QNetworkReply *reply);
     void OnEnd();
-    void OnGenericEvent(int Type, int Int0, int Int1, int Int2, int Int3, QString String0);
-    void OnLog(int Type, QString Log);
+    void OnGenericEvent(EventTypes EventType, int Int0, int Int1, int Int2, int Int3, QString String0);
+    void OnLog(LogTypes Type, QString Log);
     void OnTimer();
     void Remove();
     void UpdateIcons();
@@ -92,9 +98,10 @@ private:
     Ui::QFMainWindow *ui;
     bool UpdateInAction;
     int LastIcon;
-    QSystemTrayIcon *QSTITrayIcon= nullptr;
-    QStandardItemModel *QSIMModel= nullptr;
-    QThSynchronize *ThSynchronize= nullptr;
+    QNetworkAccessManager *pQNetworkAccessManager= nullptr;
+    QSystemTrayIcon *pQSystemTrayIcon= nullptr;
+    QStandardItemModel *pQStandardItemModel= nullptr;
+    QThSynchronize *pQThSynchronize= nullptr;
     QTimer QTIcons, Timer;
     QVector<Profile> QVProfiles;
 
