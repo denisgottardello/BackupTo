@@ -24,8 +24,14 @@
 #include "QDateTime"
 #include "QFileInfo"
 #include "QStringList"
+#ifdef Q_OS_UNIX
+    #include <utime.h>
+#endif
+#ifdef Q_OS_WIN
+    #include <Windows.h>
+#endif
 
-#define VERSION QString("1.0.9.0")
+#define VERSION QString("1.0.10.0")
 
 enum EventTypes {
     EVENT_TYPE_FILE,
@@ -52,5 +58,8 @@ struct Profile {
 };
 
 bool SetFileDateTime(QString FileOut, QDateTime QDTCreation, QDateTime QDTLastAccess, QDateTime QDTLastWrite);
+#ifdef Q_OS_WIN
+    void TimetToFileTime(time_t t, LPFILETIME pft);
+#endif
 
 #endif // COMMONS_H

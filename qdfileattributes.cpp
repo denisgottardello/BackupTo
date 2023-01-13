@@ -24,7 +24,7 @@
 QDFileAttributes::QDFileAttributes(QWidget *parent) : QDialog(parent), ui(new Ui::QDFileAttributes) {
     ui->setupUi(this);
     move(parent->window()->mapToGlobal(parent->window()->rect().center())- mapToGlobal(rect().center()));
-    #ifdef Q_OS_LINUX
+    #ifdef Q_OS_UNIX
         ui->QDTECreation->setEnabled(false);
     #endif
 }
@@ -54,10 +54,21 @@ void QDFileAttributes::on_QPBClose_clicked() {
     this->accept();
 }
 
+void QDFileAttributes::on_QPBSelectDirectory_clicked() {
+    QFileDialog FileDialog(this);
+    FileDialog.setDirectory(QFileInfo(ui->QLEFile->text()).dir().absolutePath());
+    FileDialog.setFileMode(QFileDialog::Directory);
+    FileDialog.setViewMode(QFileDialog::Detail);
+    if (FileDialog.exec()== QDialog::Accepted) {
+        ui->QLEFile->setText(FileDialog.selectedFiles().at(0));
+        ReadAttributes();
+    }
+}
+
 void QDFileAttributes::on_QPBSelectFile_clicked() {
     QFileDialog FileDialog(this);
-    FileDialog.setViewMode(QFileDialog::Detail);
     FileDialog.setDirectory(QFileInfo(ui->QLEFile->text()).dir().absolutePath());
+    FileDialog.setViewMode(QFileDialog::Detail);
     if (FileDialog.exec()== QDialog::Accepted) {
         ui->QLEFile->setText(FileDialog.selectedFiles().at(0));
         ReadAttributes();

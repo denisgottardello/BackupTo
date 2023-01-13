@@ -80,8 +80,9 @@
     <name>QDFileAttributes</name>
     <message>
         <location filename="qdfileattributes.ui" line="14"/>
-        <source>File attributes</source>
-        <translation type="unfinished">File attributi</translation>
+        <source>Change file or directory attributes</source>
+        <oldsource>File attributes</oldsource>
+        <translation type="unfinished">Cambia attributi a file o directory</translation>
     </message>
     <message>
         <location filename="qdfileattributes.ui" line="47"/>
@@ -89,39 +90,44 @@
         <translation type="unfinished">Seleziona file</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="81"/>
+        <location filename="qdfileattributes.ui" line="58"/>
+        <source>Select directory</source>
+        <translation type="unfinished">Seleziona directory</translation>
+    </message>
+    <message>
+        <location filename="qdfileattributes.ui" line="88"/>
         <source>Properties</source>
         <translation type="unfinished">Proprietà</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="99"/>
-        <location filename="qdfileattributes.ui" line="113"/>
-        <location filename="qdfileattributes.ui" line="123"/>
+        <location filename="qdfileattributes.ui" line="106"/>
+        <location filename="qdfileattributes.ui" line="120"/>
+        <location filename="qdfileattributes.ui" line="130"/>
         <source>dd/MM/yy HH:mm:ss</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="133"/>
+        <location filename="qdfileattributes.ui" line="140"/>
         <source>Last modified</source>
         <translation type="unfinished">Ultima modifica</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="205"/>
+        <location filename="qdfileattributes.ui" line="212"/>
         <source>Close</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="106"/>
+        <location filename="qdfileattributes.ui" line="113"/>
         <source>Last access</source>
         <translation type="unfinished">Ultimo accesso</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="140"/>
+        <location filename="qdfileattributes.ui" line="147"/>
         <source>Creation</source>
         <translation type="unfinished">Creazione</translation>
     </message>
     <message>
-        <location filename="qdfileattributes.ui" line="194"/>
+        <location filename="qdfileattributes.ui" line="201"/>
         <source>Apply</source>
         <translation type="unfinished">Applica</translation>
     </message>
@@ -183,7 +189,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="205"/>
-        <location filename="qfmainwindow.cpp" line="357"/>
+        <location filename="qfmainwindow.cpp" line="368"/>
         <source>Side A</source>
         <translation type="unfinished">Lato A</translation>
     </message>
@@ -195,7 +201,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="247"/>
-        <location filename="qfmainwindow.cpp" line="368"/>
+        <location filename="qfmainwindow.cpp" line="379"/>
         <source>Side B</source>
         <translation type="unfinished">Lato B</translation>
     </message>
@@ -266,8 +272,9 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="867"/>
-        <source>Change file attributes</source>
-        <translation type="unfinished">Cambia attributi file</translation>
+        <source>Change file or directory attributes</source>
+        <oldsource>Change file attributes</oldsource>
+        <translation type="unfinished">Cambia attributi a file o directory</translation>
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="872"/>
@@ -475,17 +482,17 @@
         <translation type="unfinished">BakupTo, versione </translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="249"/>
+        <location filename="qfmainwindow.cpp" line="260"/>
         <source>Profile</source>
         <translation type="unfinished">Profilo</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="250"/>
+        <location filename="qfmainwindow.cpp" line="261"/>
         <source>New profile</source>
         <translation type="unfinished">Nuovo profilo</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="277"/>
+        <location filename="qfmainwindow.cpp" line="288"/>
         <source>Are you sure you want to exit without save?</source>
         <translation type="unfinished">Sei certo di voler uscire senza salvare?</translation>
     </message>
@@ -494,9 +501,9 @@
         <translation type="obsolete">Inizio Analisi...</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="264"/>
-        <location filename="qfmainwindow.cpp" line="277"/>
-        <location filename="qfmainwindow.cpp" line="423"/>
+        <location filename="qfmainwindow.cpp" line="275"/>
+        <location filename="qfmainwindow.cpp" line="288"/>
+        <location filename="qfmainwindow.cpp" line="434"/>
         <source>Warning!</source>
         <translation type="unfinished">Attenzione!</translation>
     </message>
@@ -529,8 +536,8 @@
         <translation type="obsolete">Inizio sincronizzazione...</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="264"/>
-        <location filename="qfmainwindow.cpp" line="423"/>
+        <location filename="qfmainwindow.cpp" line="275"/>
+        <location filename="qfmainwindow.cpp" line="434"/>
         <source>Are you sure?</source>
         <translation type="unfinished">Confermi?</translation>
     </message>
@@ -572,8 +579,8 @@
 <context>
     <name>QThSynchronize</name>
     <message>
-        <location filename="qthsynchronize.cpp" line="148"/>
-        <location filename="qthsynchronize.cpp" line="158"/>
+        <location filename="qthsynchronize.cpp" line="149"/>
+        <location filename="qthsynchronize.cpp" line="159"/>
         <source> deleted</source>
         <translation type="unfinished"> cancellato</translation>
     </message>
@@ -586,13 +593,13 @@
         <translation type="obsolete"> errore in creazione!</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="195"/>
+        <location filename="qthsynchronize.cpp" line="196"/>
         <source> error on change file date time!</source>
         <translation type="unfinished"> errore cambiando data ed ora</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="126"/>
-        <location filename="qthsynchronize.cpp" line="197"/>
+        <location filename="qthsynchronize.cpp" line="127"/>
+        <location filename="qthsynchronize.cpp" line="198"/>
         <source> copied</source>
         <translation type="unfinished"> copiato</translation>
     </message>
@@ -613,7 +620,7 @@
     </message>
     <message>
         <location filename="qthsynchronize.cpp" line="78"/>
-        <location filename="qthsynchronize.cpp" line="86"/>
+        <location filename="qthsynchronize.cpp" line="87"/>
         <source> created</source>
         <translation type="unfinished"> creato</translation>
     </message>
@@ -623,40 +630,40 @@
         <translation type="unfinished">Errore creando la directory</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="83"/>
+        <location filename="qthsynchronize.cpp" line="84"/>
         <source>Error on change folder date time </source>
-        <translation type="unfinished">Errore cambiando data ed ora della directory</translation>
+        <translation type="unfinished">Errore cambiando data ed ora della directory </translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="97"/>
+        <location filename="qthsynchronize.cpp" line="98"/>
         <source>(not exists)</source>
         <translation type="unfinished">(non esiste)</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="103"/>
+        <location filename="qthsynchronize.cpp" line="104"/>
         <source>(file date time not equals)</source>
         <translation type="unfinished">(le date dei file non coincidono)</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="113"/>
+        <location filename="qthsynchronize.cpp" line="114"/>
         <source>(source file date time greater than destination)</source>
         <translation type="unfinished">(file sorgente più recende del file destinazione)</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="185"/>
+        <location filename="qthsynchronize.cpp" line="186"/>
         <source> unable to copy file</source>
         <translation type="unfinished"> impossibile copiare il file</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="200"/>
         <location filename="qthsynchronize.cpp" line="201"/>
-        <location filename="qthsynchronize.cpp" line="203"/>
+        <location filename="qthsynchronize.cpp" line="202"/>
+        <location filename="qthsynchronize.cpp" line="204"/>
         <source> error on copy to </source>
         <translation type="unfinished"> errore copiando su </translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="149"/>
-        <location filename="qthsynchronize.cpp" line="159"/>
+        <location filename="qthsynchronize.cpp" line="150"/>
+        <location filename="qthsynchronize.cpp" line="160"/>
         <source> error on delete!</source>
         <translation type="unfinished"> errore in eliminazione!</translation>
     </message>

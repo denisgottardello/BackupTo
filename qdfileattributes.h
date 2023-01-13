@@ -45,6 +45,7 @@ private slots:
     void on_QDTELastModified_dateTimeChanged(const QDateTime &date);
     void on_QPBApply_clicked();
     void on_QPBClose_clicked();
+    void on_QPBSelectDirectory_clicked();
     void on_QPBSelectFile_clicked();
 
 private:

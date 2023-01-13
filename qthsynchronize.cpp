@@ -103,21 +103,11 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                             CanGo= true;
                             Reason= tr("(file date time not equals)");
                         }
-                        /*else {
-                            #ifdef Q_OS_WIN
-                                if (QFIPathSource.birthTime().toString("yyyyMMddhhmmss").compare(QFIPathDestination.birthTime().toString("yyyyMMddhhmmss"))!= 0) CanGo= true;
-                            #endif
-                        }*/
                     } else {
                         if (QFIPathSource.lastModified().toString("yyyyMMddhhmmss").compare(QFIPathDestination.lastModified().toString("yyyyMMddhhmmss"))> 0) {
                             CanGo= true;
                             Reason= tr("(source file date time greater than destination)");
                         }
-                        /*else {
-                            #ifdef Q_OS_WIN
-                                if (QFIPathSource.birthTime().toString("yyyyMMddhhmmss").compare(QFIPathDestination.birthTime().toString("yyyyMMddhhmmss"))> 0) CanGo= true;
-                            #endif
-                        }*/
                     }
                 }
                 if (CanGo) {

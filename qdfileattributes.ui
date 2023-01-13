@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>File attributes</string>
+   <string>Change file or directory attributes</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
@@ -49,6 +49,13 @@
         <property name="icon">
          <iconset>
           <normaloff>:/Icone/Icone/Start-Menu-Search-icon.png</normaloff>:/Icone/Icone/Start-Menu-Search-icon.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="QPBSelectDirectory">
+        <property name="text">
+         <string>Select directory</string>
         </property>
        </widget>
       </item>
@@ -218,6 +225,7 @@
  <tabstops>
   <tabstop>QPBSelectFile</tabstop>
   <tabstop>QLEFile</tabstop>
+  <tabstop>QPBSelectDirectory</tabstop>
   <tabstop>QDTECreation</tabstop>
   <tabstop>QDTELastModified</tabstop>
   <tabstop>QDTELastAccess</tabstop>
