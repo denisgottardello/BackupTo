@@ -124,11 +124,18 @@ void QFMainWindow::AddFiles() {
 }
 
 void QFMainWindow::AddDirectories() {
-    QFileDialog FileDialog;
+    /*QFileDialog FileDialog;
     FileDialog.setViewMode(QFileDialog::Detail);
     FileDialog.setFileMode(QFileDialog::DirectoryOnly);
     if (FileDialog.exec()== QDialog::Accepted) {
         QVProfiles[ui->QLWProfiles->currentRow()].QSLExclusionFiles.append(FileDialog.selectedFiles());
+        ui->QLWExclusionList->clear();
+        ui->QLWExclusionList->addItems(QVProfiles.at(ui->QLWProfiles->currentRow()).QSLExclusionFiles);
+        ui->QPBSave->setEnabled(true);
+    }*/
+    QString Path= QFileDialog::getExistingDirectory(this, tr("Directory to add"), QVProfiles[ui->QLWProfiles->row(ui->QLWProfiles->currentItem())].SideA, QFileDialog::ShowDirsOnly);
+    if (Path.length()> 0) {
+        QVProfiles[ui->QLWProfiles->currentRow()].QSLExclusionFiles.append(Path);
         ui->QLWExclusionList->clear();
         ui->QLWExclusionList->addItems(QVProfiles.at(ui->QLWProfiles->currentRow()).QSLExclusionFiles);
         ui->QPBSave->setEnabled(true);
@@ -146,7 +153,7 @@ void QFMainWindow::finished(QNetworkReply *reply) {
 }
 
 void QFMainWindow::on_QAAuthor_triggered() {
-    QMessageBox::information(this, "Info", "Denis Gottardello\nwww.denisgottardello.it\ninfo@denisgottardello.it", "Ok");
+    QMessageBox::information(this, "Info", "Denis Gottardello\nwww.denisgottardello.it\ninfo@denisgottardello.it", QMessageBox::Ok);
 }
 
 void QFMainWindow::on_QADirectoryEmpty_triggered() {
@@ -160,7 +167,7 @@ void QFMainWindow::on_QAFileAttributesChange_triggered() {
 }
 
 void QFMainWindow::on_QAQtVersion_triggered() {
-    QMessageBox::information(this, "Info", tr("Qt version: ")+ QT_VERSION_STR, "Ok");
+    QMessageBox::information(this, "Info", tr("Qt version: ")+ QT_VERSION_STR, QMessageBox::Ok);
 }
 
 void QFMainWindow::on_QAQuit_triggered() {
@@ -168,7 +175,7 @@ void QFMainWindow::on_QAQuit_triggered() {
 }
 
 void QFMainWindow::on_QAVersion_triggered() {
-    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ VERSION, "Ok");
+    QMessageBox::information(this, "Info", tr("BackupTo, version ")+ VERSION, QMessageBox::Ok);
 }
 
 void QFMainWindow::on_QCBDeleteFilesOnTargetSide_toggled(bool checked) {
@@ -193,8 +200,8 @@ void QFMainWindow::on_QLESideB_textChanged(const QString &) {
 
 void QFMainWindow::on_QLVLog_doubleClicked(const QModelIndex &index) {
     if (pQStandardItemModel->item(index.row(), index.column())->text().contains("[") && pQStandardItemModel->item(index.row(), index.column())->text().contains("]")) {
-        QString Value= pQStandardItemModel->item(index.row(), index.column())->text().midRef(pQStandardItemModel->item(index.row(), index.column())->text().indexOf("[")).toString();
-        Value= pQStandardItemModel->item(index.row(), index.column())->text().midRef(1, pQStandardItemModel->item(index.row(), index.column())->text().indexOf("]")- 1).toString();
+        QString Value= pQStandardItemModel->item(index.row(), index.column())->text().mid(pQStandardItemModel->item(index.row(), index.column())->text().indexOf("["));
+        Value= pQStandardItemModel->item(index.row(), index.column())->text().mid(1, pQStandardItemModel->item(index.row(), index.column())->text().indexOf("]")- 1);
         if (Value.length()> 0) {
             QFileInfo FileInfo(Value);
             QDesktopServices::openUrl(QUrl("file:///"+ FileInfo.absoluteDir().absolutePath()));

@@ -189,7 +189,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="205"/>
-        <location filename="qfmainwindow.cpp" line="368"/>
+        <location filename="qfmainwindow.cpp" line="375"/>
         <source>Side A</source>
         <translation type="unfinished">Lato A</translation>
     </message>
@@ -201,7 +201,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="247"/>
-        <location filename="qfmainwindow.cpp" line="379"/>
+        <location filename="qfmainwindow.cpp" line="386"/>
         <source>Side B</source>
         <translation type="unfinished">Lato B</translation>
     </message>
@@ -236,22 +236,22 @@
         <translation type="unfinished">Ignora la data dei file</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="576"/>
+        <location filename="qfmainwindow.ui" line="664"/>
         <source>Files deleted</source>
         <translation type="unfinished">File cancellati</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="586"/>
+        <location filename="qfmainwindow.ui" line="674"/>
         <source>Files copied</source>
         <translation type="unfinished">File copiati</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="599"/>
+        <location filename="qfmainwindow.ui" line="687"/>
         <source>Directories copied</source>
         <translation type="unfinished">Directory copiate</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="606"/>
+        <location filename="qfmainwindow.ui" line="694"/>
         <source>Directories deleted</source>
         <translation type="unfinished">Directory cancellate</translation>
     </message>
@@ -261,12 +261,12 @@
         <translation type="unfinished">Pulisci</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="660"/>
+        <location filename="qfmainwindow.ui" line="527"/>
         <source>Simulation</source>
         <translation type="unfinished">Simulazione</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="676"/>
+        <location filename="qfmainwindow.ui" line="543"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -306,7 +306,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="543"/>
+        <location filename="qfmainwindow.ui" line="631"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -373,7 +373,7 @@
         <translation type="obsolete">Sincronizza</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="696"/>
+        <location filename="qfmainwindow.ui" line="563"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -395,7 +395,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.ui" line="827"/>
-        <location filename="qfmainwindow.cpp" line="141"/>
+        <location filename="qfmainwindow.cpp" line="148"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -467,32 +467,37 @@
         <translation type="unfinished">Rimuovi</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="141"/>
+        <location filename="qfmainwindow.cpp" line="136"/>
+        <source>Directory to add</source>
+        <translation type="unfinished">Directory da aggiungere</translation>
+    </message>
+    <message>
+        <location filename="qfmainwindow.cpp" line="148"/>
         <source>New version available. Do you want to open the BackupTo download page?</source>
         <translation type="unfinished">Nuova versione disponibile. Vuoi aprire la pagina web di BackupTo?</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="163"/>
+        <location filename="qfmainwindow.cpp" line="170"/>
         <source>Qt version: </source>
         <translation type="unfinished">Versione Qt: </translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="171"/>
+        <location filename="qfmainwindow.cpp" line="178"/>
         <source>BackupTo, version </source>
         <translation type="unfinished">BakupTo, versione </translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="260"/>
+        <location filename="qfmainwindow.cpp" line="267"/>
         <source>Profile</source>
         <translation type="unfinished">Profilo</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="261"/>
+        <location filename="qfmainwindow.cpp" line="268"/>
         <source>New profile</source>
         <translation type="unfinished">Nuovo profilo</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="288"/>
+        <location filename="qfmainwindow.cpp" line="295"/>
         <source>Are you sure you want to exit without save?</source>
         <translation type="unfinished">Sei certo di voler uscire senza salvare?</translation>
     </message>
@@ -501,9 +506,9 @@
         <translation type="obsolete">Inizio Analisi...</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="275"/>
-        <location filename="qfmainwindow.cpp" line="288"/>
-        <location filename="qfmainwindow.cpp" line="434"/>
+        <location filename="qfmainwindow.cpp" line="282"/>
+        <location filename="qfmainwindow.cpp" line="295"/>
+        <location filename="qfmainwindow.cpp" line="441"/>
         <source>Warning!</source>
         <translation type="unfinished">Attenzione!</translation>
     </message>
@@ -536,8 +541,8 @@
         <translation type="obsolete">Inizio sincronizzazione...</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.cpp" line="275"/>
-        <location filename="qfmainwindow.cpp" line="434"/>
+        <location filename="qfmainwindow.cpp" line="282"/>
+        <location filename="qfmainwindow.cpp" line="441"/>
         <source>Are you sure?</source>
         <translation type="unfinished">Confermi?</translation>
     </message>
@@ -579,8 +584,8 @@
 <context>
     <name>QThSynchronize</name>
     <message>
+        <location filename="qthsynchronize.cpp" line="139"/>
         <location filename="qthsynchronize.cpp" line="149"/>
-        <location filename="qthsynchronize.cpp" line="159"/>
         <source> deleted</source>
         <translation type="unfinished"> cancellato</translation>
     </message>
@@ -593,13 +598,13 @@
         <translation type="obsolete"> errore in creazione!</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="196"/>
+        <location filename="qthsynchronize.cpp" line="186"/>
         <source> error on change file date time!</source>
         <translation type="unfinished"> errore cambiando data ed ora</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="127"/>
-        <location filename="qthsynchronize.cpp" line="198"/>
+        <location filename="qthsynchronize.cpp" line="117"/>
+        <location filename="qthsynchronize.cpp" line="188"/>
         <source> copied</source>
         <translation type="unfinished"> copiato</translation>
     </message>
@@ -645,25 +650,25 @@
         <translation type="unfinished">(le date dei file non coincidono)</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="114"/>
+        <location filename="qthsynchronize.cpp" line="109"/>
         <source>(source file date time greater than destination)</source>
         <translation type="unfinished">(file sorgente più recende del file destinazione)</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="186"/>
+        <location filename="qthsynchronize.cpp" line="176"/>
         <source> unable to copy file</source>
         <translation type="unfinished"> impossibile copiare il file</translation>
     </message>
     <message>
-        <location filename="qthsynchronize.cpp" line="201"/>
-        <location filename="qthsynchronize.cpp" line="202"/>
-        <location filename="qthsynchronize.cpp" line="204"/>
+        <location filename="qthsynchronize.cpp" line="191"/>
+        <location filename="qthsynchronize.cpp" line="192"/>
+        <location filename="qthsynchronize.cpp" line="194"/>
         <source> error on copy to </source>
         <translation type="unfinished"> errore copiando su </translation>
     </message>
     <message>
+        <location filename="qthsynchronize.cpp" line="140"/>
         <location filename="qthsynchronize.cpp" line="150"/>
-        <location filename="qthsynchronize.cpp" line="160"/>
         <source> error on delete!</source>
         <translation type="unfinished"> errore in eliminazione!</translation>
     </message>

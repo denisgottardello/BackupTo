@@ -36,17 +36,24 @@ bool SetFileDateTime(QString FileOut, QDateTime QDTCreation, QDateTime QDTLastAc
     } else if (QFIFileOut.isDir()) {
         #ifdef Q_OS_UNIX
             utimbuf times;
-            times.actime= QDTLastAccess.toTime_t();
-            times.modtime= QDTLastWrite.toTime_t();
+            qint64 Temp= QDTLastAccess.toMSecsSinceEpoch() / 1000;
+            qint64 Temp2= QDTLastWrite.toMSecsSinceEpoch() / 1000;
+            if (quint64(Temp)>= Q_UINT64_C(0xffffffff)) times.actime= -1;
+            else times.actime= uint(Temp);
+            if (quint64(Temp2)>= Q_UINT64_C(0xffffffff)) times.modtime= -1;
+            else times.modtime= uint(Temp2);
             Result= utime(FileOut.toStdString().c_str(), &times)== 0;
         #endif
         #ifdef Q_OS_WIN
             FILETIME FTCreation;
             FILETIME FTLastAccess;
             FILETIME FTLastWrite;
-            TimetToFileTime(QDTCreation.toTime_t(), &FTCreation);
-            TimetToFileTime(QDTLastAccess.toTime_t(), &FTLastAccess);
-            TimetToFileTime(QDTLastWrite.toTime_t(), &FTLastWrite);
+            qint64 Temp= QDTCreation.toMSecsSinceEpoch() / 1000;
+            qint64 Temp2= QDTLastAccess.toMSecsSinceEpoch() / 1000;
+            qint64 Temp3= QDTLastWrite.toMSecsSinceEpoch() / 1000;
+            TimetToFileTime(Temp, &FTCreation);
+            TimetToFileTime(Temp2, &FTLastAccess);
+            TimetToFileTime(Temp3, &FTLastWrite);
             HANDLE h;
             h= CreateFileA(FileOut.toStdString().c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
             if (h!= INVALID_HANDLE_VALUE) {

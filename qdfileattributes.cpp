@@ -46,7 +46,7 @@ void QDFileAttributes::on_QDTELastModified_dateTimeChanged(const QDateTime &) {
 }
 
 void QDFileAttributes::on_QPBApply_clicked() {
-    if (!SetFileDateTime(ui->QLEFile->text(), ui->QDTECreation->dateTime(), ui->QDTELastAccess->dateTime(), ui->QDTELastModified->dateTime())) QMessageBox::critical(this, tr("Error!!!"), tr("Unable to apply the attributes!"), "Ok");
+    if (!SetFileDateTime(ui->QLEFile->text(), ui->QDTECreation->dateTime(), ui->QDTELastAccess->dateTime(), ui->QDTELastModified->dateTime())) QMessageBox::critical(this, tr("Error!!!"), tr("Unable to apply the attributes!"), QMessageBox::Ok);
     else ReadAttributes();
 }
 
