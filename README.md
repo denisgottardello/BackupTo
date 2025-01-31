@@ -7,9 +7,5 @@ Keeps aligned 2 or more directories, changes the attributes of a file, flush a d
 
 ![](BackupToScreenshot01.png)
 
-## Commands list
-
-![](BackupToScreenshot02.png)
-
 ## Download BackupTo for Windows and Mac OSX
 [https://www.denisgottardello.it/BackupTo/](https://www.denisgottardello.it/BackupTo/)
