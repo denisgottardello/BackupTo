@@ -34,7 +34,7 @@
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Orientation::Vertical</enum>
       </property>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="title">
@@ -93,7 +93,7 @@
               <item>
                <spacer name="horizontalSpacer_2">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -340,7 +340,7 @@
                  <item>
                   <spacer name="verticalSpacer_2">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -408,7 +408,7 @@
                  <item>
                   <spacer name="verticalSpacer">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -460,7 +460,7 @@
                   <item>
                    <spacer name="horizontalSpacer_6">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -479,7 +479,7 @@
                      <string>+</string>
                     </property>
                     <property name="popupMode">
-                     <enum>QToolButton::InstantPopup</enum>
+                     <enum>QToolButton::ToolButtonPopupMode::InstantPopup</enum>
                     </property>
                    </widget>
                   </item>
@@ -492,7 +492,7 @@
                      <string>-</string>
                     </property>
                     <property name="popupMode">
-                     <enum>QToolButton::InstantPopup</enum>
+                     <enum>QToolButton::ToolButtonPopupMode::InstantPopup</enum>
                     </property>
                    </widget>
                   </item>
@@ -528,6 +528,16 @@
              </property>
              <property name="checked">
               <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="QCBLogShow">
+             <property name="text">
+              <string>Show log</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -574,14 +584,14 @@
               <string/>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignmentFlag::AlignCenter</set>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="verticalSpacer_5">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Orientation::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -701,7 +711,7 @@
                  <item row="4" column="1">
                   <spacer name="verticalSpacer_3">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -720,7 +730,7 @@
                  <bool>true</bool>
                 </property>
                 <property name="selectionBehavior">
-                 <enum>QAbstractItemView::SelectRows</enum>
+                 <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
                 </property>
                </widget>
               </item>
@@ -762,7 +772,7 @@
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -819,7 +829,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAuthor">
@@ -893,6 +903,7 @@
   <tabstop>QTBExclusionListAdd</tabstop>
   <tabstop>QTBExclusionListRemove</tabstop>
   <tabstop>QCBSimulation</tabstop>
+  <tabstop>QCBLogShow</tabstop>
   <tabstop>QPBStart</tabstop>
   <tabstop>QPBStop</tabstop>
   <tabstop>QLVLog</tabstop>

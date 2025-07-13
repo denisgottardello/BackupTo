@@ -236,27 +236,32 @@
         <translation type="unfinished">Ignora la data dei file</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="664"/>
+        <location filename="qfmainwindow.ui" line="537"/>
+        <source>Show log</source>
+        <translation type="unfinished">Mostra log</translation>
+    </message>
+    <message>
+        <location filename="qfmainwindow.ui" line="674"/>
         <source>Files deleted</source>
         <translation type="unfinished">File cancellati</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="674"/>
+        <location filename="qfmainwindow.ui" line="684"/>
         <source>Files copied</source>
         <translation type="unfinished">File copiati</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="687"/>
+        <location filename="qfmainwindow.ui" line="697"/>
         <source>Directories copied</source>
         <translation type="unfinished">Directory copiate</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="694"/>
+        <location filename="qfmainwindow.ui" line="704"/>
         <source>Directories deleted</source>
         <translation type="unfinished">Directory cancellate</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="778"/>
+        <location filename="qfmainwindow.ui" line="788"/>
         <source>Clear</source>
         <translation type="unfinished">Pulisci</translation>
     </message>
@@ -266,18 +271,18 @@
         <translation type="unfinished">Simulazione</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="543"/>
+        <location filename="qfmainwindow.ui" line="553"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="867"/>
+        <location filename="qfmainwindow.ui" line="877"/>
         <source>Change file or directory attributes</source>
         <oldsource>Change file attributes</oldsource>
         <translation type="unfinished">Cambia attributi a file o directory</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="872"/>
+        <location filename="qfmainwindow.ui" line="882"/>
         <source>Directory empty</source>
         <translation type="unfinished">Svuota directory</translation>
     </message>
@@ -306,7 +311,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="631"/>
+        <location filename="qfmainwindow.ui" line="641"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
@@ -351,12 +356,12 @@
         <translation type="obsolete">Seleziona tutto</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="837"/>
+        <location filename="qfmainwindow.ui" line="847"/>
         <source>Tools</source>
         <translation type="unfinished">Strumenti</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="857"/>
+        <location filename="qfmainwindow.ui" line="867"/>
         <source>Qt version</source>
         <translation type="unfinished">Versione Qt</translation>
     </message>
@@ -373,12 +378,12 @@
         <translation type="obsolete">Sincronizza</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="563"/>
+        <location filename="qfmainwindow.ui" line="573"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="788"/>
+        <location filename="qfmainwindow.ui" line="798"/>
         <source>Save</source>
         <translation type="unfinished">Salva</translation>
     </message>
@@ -387,25 +392,25 @@
         <translation type="obsolete">Minimizza</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="799"/>
-        <location filename="qfmainwindow.ui" line="862"/>
+        <location filename="qfmainwindow.ui" line="809"/>
+        <location filename="qfmainwindow.ui" line="872"/>
         <location filename="qfmainwindow.cpp" line="46"/>
         <source>Quit</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="827"/>
+        <location filename="qfmainwindow.ui" line="837"/>
         <location filename="qfmainwindow.cpp" line="148"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="847"/>
+        <location filename="qfmainwindow.ui" line="857"/>
         <source>Author</source>
         <translation type="unfinished">Autore</translation>
     </message>
     <message>
-        <location filename="qfmainwindow.ui" line="852"/>
+        <location filename="qfmainwindow.ui" line="862"/>
         <source>Version</source>
         <translation type="unfinished">Versione</translation>
     </message>
@@ -508,7 +513,7 @@
     <message>
         <location filename="qfmainwindow.cpp" line="282"/>
         <location filename="qfmainwindow.cpp" line="295"/>
-        <location filename="qfmainwindow.cpp" line="441"/>
+        <location filename="qfmainwindow.cpp" line="443"/>
         <source>Warning!</source>
         <translation type="unfinished">Attenzione!</translation>
     </message>
@@ -542,7 +547,7 @@
     </message>
     <message>
         <location filename="qfmainwindow.cpp" line="282"/>
-        <location filename="qfmainwindow.cpp" line="441"/>
+        <location filename="qfmainwindow.cpp" line="443"/>
         <source>Are you sure?</source>
         <translation type="unfinished">Confermi?</translation>
     </message>

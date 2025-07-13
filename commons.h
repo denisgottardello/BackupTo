@@ -31,7 +31,7 @@
     #include <Windows.h>
 #endif
 
-#define VERSION QString("1.0.11.0")
+#define VERSION QString("1.0.12.0")
 
 enum EventTypes {
     EVENT_TYPE_FILE,

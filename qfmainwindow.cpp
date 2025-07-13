@@ -112,7 +112,7 @@ QFMainWindow::~QFMainWindow() {
 }
 
 void QFMainWindow::AddFiles() {
-    QFileDialog FileDialog;
+    QFileDialog FileDialog(this);
     FileDialog.setViewMode(QFileDialog::Detail);
     FileDialog.setFileMode(QFileDialog::ExistingFiles);
     if (FileDialog.exec()== QDialog::Accepted) {
@@ -124,15 +124,6 @@ void QFMainWindow::AddFiles() {
 }
 
 void QFMainWindow::AddDirectories() {
-    /*QFileDialog FileDialog;
-    FileDialog.setViewMode(QFileDialog::Detail);
-    FileDialog.setFileMode(QFileDialog::DirectoryOnly);
-    if (FileDialog.exec()== QDialog::Accepted) {
-        QVProfiles[ui->QLWProfiles->currentRow()].QSLExclusionFiles.append(FileDialog.selectedFiles());
-        ui->QLWExclusionList->clear();
-        ui->QLWExclusionList->addItems(QVProfiles.at(ui->QLWProfiles->currentRow()).QSLExclusionFiles);
-        ui->QPBSave->setEnabled(true);
-    }*/
     QString Path= QFileDialog::getExistingDirectory(this, tr("Directory to add"), QVProfiles[ui->QLWProfiles->row(ui->QLWProfiles->currentItem())].SideA, QFileDialog::ShowDirsOnly);
     if (Path.length()> 0) {
         QVProfiles[ui->QLWProfiles->currentRow()].QSLExclusionFiles.append(Path);
@@ -199,14 +190,9 @@ void QFMainWindow::on_QLESideB_textChanged(const QString &) {
 }
 
 void QFMainWindow::on_QLVLog_doubleClicked(const QModelIndex &index) {
-    if (pQStandardItemModel->item(index.row(), index.column())->text().contains("[") && pQStandardItemModel->item(index.row(), index.column())->text().contains("]")) {
-        QString Value= pQStandardItemModel->item(index.row(), index.column())->text().mid(pQStandardItemModel->item(index.row(), index.column())->text().indexOf("["));
-        Value= pQStandardItemModel->item(index.row(), index.column())->text().mid(1, pQStandardItemModel->item(index.row(), index.column())->text().indexOf("]")- 1);
-        if (Value.length()> 0) {
-            QFileInfo FileInfo(Value);
-            QDesktopServices::openUrl(QUrl("file:///"+ FileInfo.absoluteDir().absolutePath()));
-        }
-    }
+    QString Value= QVLogs.at(index.row());
+    QFileInfo FileInfo(Value);
+    if (Value.length() && FileInfo.absoluteDir().canonicalPath().length()) QDesktopServices::openUrl(QUrl::fromLocalFile(FileInfo.absoluteDir().canonicalPath()));
 }
 
 void QFMainWindow::on_QLWProfiles_clicked(const QModelIndex &index) {
@@ -331,7 +317,7 @@ void QFMainWindow::on_QPBStart_clicked() {
     pQThSynchronize= new QThSynchronize(QVProfiles.at(ui->QLWProfiles->currentRow()), ui->QCBSimulation->isChecked());
     connect(pQThSynchronize, SIGNAL(OnEnd()), this, SLOT(OnEnd()), Qt::QueuedConnection);
     connect(pQThSynchronize, SIGNAL(OnGenericEvent(EventTypes,int,int,int,int,QString)), this, SLOT(OnGenericEvent(EventTypes,int,int,int,int,QString)), Qt::QueuedConnection);
-    connect(pQThSynchronize, SIGNAL(OnLog(LogTypes,QString)), this, SLOT(OnLog(LogTypes,QString)), Qt::QueuedConnection);
+    connect(pQThSynchronize, SIGNAL(OnLog(LogTypes,QString,QString)), this, SLOT(OnLog(LogTypes,QString,QString)), Qt::DirectConnection);
     pQThSynchronize->start();
     ui->QPBStop->setEnabled(true);
 }
@@ -400,7 +386,7 @@ void QFMainWindow::OnEnd() {
 void QFMainWindow::OnGenericEvent(EventTypes EventType, int Int0, int Int1, int Int2, int Int3, QString String0) {
     switch(EventType) {
         case EVENT_TYPE_FILE: {
-            ui->QLFile->setText(String0);
+            ui->QLFile->setText(String0.length()< 96 ? String0 : "..."+ String0.mid(String0.length()- 96- 1, String0.length()));
             break;
         }
         case EVENT_TYPE_FILE_STATUS: {
@@ -417,20 +403,24 @@ void QFMainWindow::OnGenericEvent(EventTypes EventType, int Int0, int Int1, int 
     }
 }
 
-void QFMainWindow::OnLog(LogTypes Type, QString Log) {
-    while (pQStandardItemModel->rowCount()> 1024 * 8) pQStandardItemModel->takeRow(0);
-    pQStandardItemModel->setRowCount(pQStandardItemModel->rowCount()+ 1);
-    QStandardItem *StandardItem0= new QStandardItem(Log);
-    switch(Type) {
-        case LOG_TYPE_ERROR: {
-            StandardItem0->setForeground(Qt::red);
-            break;
+void QFMainWindow::OnLog(LogTypes Type, QString Path, QString Description) {
+    if (ui->QCBLogShow->isChecked()) {
+        while (pQStandardItemModel->rowCount()> 512) pQStandardItemModel->takeRow(0);
+        while (QVLogs.length()> 512) QVLogs.removeFirst();
+        pQStandardItemModel->setRowCount(pQStandardItemModel->rowCount()+ 1);
+        QStandardItem *pQStandardItem= new QStandardItem(Path+ Description);
+        QVLogs.append(Path);
+        switch(Type) {
+            case LOG_TYPE_ERROR: {
+                pQStandardItem->setForeground(Qt::red);
+                break;
+            }
+            default:
+                break;
         }
-        default:
-            break;
+        pQStandardItemModel->setItem(pQStandardItemModel->rowCount()- 1, 0, pQStandardItem);
+        ui->QLVLog->setModel(pQStandardItemModel);
     }
-    pQStandardItemModel->setItem(pQStandardItemModel->rowCount()- 1, 0, StandardItem0);
-    ui->QLVLog->setModel(pQStandardItemModel);
 }
 
 void QFMainWindow::OnTimer() {

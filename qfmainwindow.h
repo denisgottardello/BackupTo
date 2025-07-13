@@ -89,7 +89,7 @@ private slots:
     void finished(QNetworkReply *reply);
     void OnEnd();
     void OnGenericEvent(EventTypes EventType, int Int0, int Int1, int Int2, int Int3, QString String0);
-    void OnLog(LogTypes Type, QString Log);
+    void OnLog(LogTypes Type, QString Path, QString Description);
     void OnTimer();
     void Remove();
     void UpdateIcons();
@@ -104,6 +104,7 @@ private:
     QThSynchronize *pQThSynchronize= nullptr;
     QTimer QTIcons, Timer;
     QVector<Profile> QVProfiles;
+    QVector<QString> QVLogs;
 
 };
 

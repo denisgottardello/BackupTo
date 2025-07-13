@@ -26,7 +26,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setStyle(QStyleFactory::create("plastique"));
+    a.setStyle(QStyleFactory::create("Fusion"));
 
     QTranslator translator, translator2;
     if (translator.load("BackupTo_"+ QLocale::system().name(), ":/Translations")) a.installTranslator(&translator);

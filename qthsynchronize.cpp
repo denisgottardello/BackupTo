@@ -31,7 +31,7 @@ QThSynchronize::~QThSynchronize() {
 }
 
 void QThSynchronize::run() {
-    emit OnLog(LOG_TYPE_STANDARD, tr("Begin synchronization"));
+    emit OnLog(LOG_TYPE_STANDARD, "", tr("Begin synchronization"));
     switch (profile.Direction) {
         case SIDEA_SIDEB_MERGE: {
             DirectoryCheckToCopy(profile.SideA, profile.SideB, profile.SideA, profile.IgnoreFileDate, true);
@@ -49,8 +49,8 @@ void QThSynchronize::run() {
             break;
         }
     }
-    if (DoStart) emit OnLog(LOG_TYPE_STANDARD, tr("Synchronization completed"));
-    else emit OnLog(LOG_TYPE_STANDARD, tr("Synchronization interrupted"));
+    if (DoStart) emit OnLog(LOG_TYPE_STANDARD, "", tr("Synchronization completed"));
+    else emit OnLog(LOG_TYPE_STANDARD, "", tr("Synchronization interrupted"));
     if (DoStart) emit OnEnd();
 }
 
@@ -75,16 +75,16 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                         if (Simulation) {
                             DirecoriesCopied++;
                             emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                            emit OnLog(LOG_TYPE_STANDARD, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" created"));
+                            emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath(), tr(" created"));
                         } else {
                             QDir QDPathDestination;
-                            if (!QDPathDestination.mkpath(QFIPathDestination.absoluteFilePath())) emit OnLog(LOG_TYPE_ERROR, tr("Error on create folder ")+ "["+ QFIPathDestination.absoluteFilePath()+ "]");
+                            if (!QDPathDestination.mkpath(QFIPathDestination.absoluteFilePath())) emit OnLog(LOG_TYPE_ERROR, "", tr("Error on create folder ")+ QFIPathDestination.absoluteFilePath());
                             else {
                                 if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.birthTime(), QFIPathSource.lastRead(), QFIPathSource.lastModified()))
-                                    emit OnLog(LOG_TYPE_ERROR, tr("Error on change folder date time ")+ "["+ QFIPathDestination.absoluteFilePath()+ "]");
+                                    emit OnLog(LOG_TYPE_ERROR, "", tr("Error on change folder date time ")+ QFIPathDestination.absoluteFilePath());
                                 DirecoriesCopied++;
                                 emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                                emit OnLog(LOG_TYPE_STANDARD, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" created"));
+                                emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath(), tr(" created"));
                             }
                         }
                     }
@@ -114,7 +114,7 @@ void QThSynchronize::DirectoryCheckToCopy(QString Source, QString Destination, Q
                     if (Simulation) {
                         FilesCopied++;
                         emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                        emit OnLog(LOG_TYPE_STANDARD, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" copied")+ " "+ Reason);
+                        emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath(), tr(" copied")+ " "+ Reason);
                     } else FileCopy(QFIPathSource, QFIPathDestination);
                 }
             }
@@ -136,8 +136,8 @@ void QThSynchronize::DirectoryCheckToDelete(QString Source, QString Destination,
                     if (Simulation || QDPathSource.removeRecursively()) {
                         DirectoriesDeleted++;
                         emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                        emit OnLog(LOG_TYPE_STANDARD, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" deleted"));
-                    } else emit OnLog(LOG_TYPE_ERROR, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" error on delete!"));
+                        emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath(), tr(" deleted"));
+                    } else emit OnLog(LOG_TYPE_ERROR, QFIPathSource.absoluteFilePath(), tr(" error on delete!"));
                 } else DirectoryCheckToDelete(Source, Destination, QFIPathSource.absoluteFilePath());
             }
         } else if (DoStart && QFIPathSource.isFile()) {
@@ -146,8 +146,8 @@ void QThSynchronize::DirectoryCheckToDelete(QString Source, QString Destination,
                 if (Simulation || QFSource.remove()) {
                     FilesDeleted++;
                     emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                    emit OnLog(LOG_TYPE_STANDARD, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" deleted"));
-                } else emit OnLog(LOG_TYPE_ERROR, "["+ QFIPathSource.absoluteFilePath()+ "]"+ tr(" error on delete!"));
+                    emit OnLog(LOG_TYPE_STANDARD, QFIPathSource.absoluteFilePath(), tr(" deleted"));
+                } else emit OnLog(LOG_TYPE_ERROR, QFIPathSource.absoluteFilePath(), tr(" error on delete!"));
             }
         }
     }
@@ -164,7 +164,7 @@ bool QThSynchronize::FileCopy(QFileInfo &QFIPathSource, QFileInfo &QFIPathDestin
             emit OnGenericEvent(EVENT_TYPE_FILE, 0, 0, 0, 0, QFSource.fileName());
             QDateTime QDTLastEvent= QDateTime::currentDateTime();
             while (DoStart && !QFSource.atEnd()) {
-                Position+= 4096;
+                Position+= 1024 * 128;
                 if (QDTLastEvent.msecsTo(QDateTime::currentDateTime())> 250) {
                     emit OnGenericEvent(EVENT_TYPE_FILE_STATUS, static_cast<int>((Position * 100) / QFSource.size()), 0, 0, 0, "");
                     QDTLastEvent= QDateTime::currentDateTime();
@@ -173,7 +173,7 @@ bool QThSynchronize::FileCopy(QFileInfo &QFIPathSource, QFileInfo &QFIPathDestin
                 if (QBAByteIn.length()> 0) {
                     QFDestination.flush();
                     if (QFDestination.write(QBAByteIn)!= QBAByteIn.size()) {
-                        emit OnLog(LOG_TYPE_ERROR, "["+ QFSource.fileName()+ "]"+ tr(" unable to copy file"));
+                        emit OnLog(LOG_TYPE_ERROR, QFSource.fileName(), tr(" unable to copy file"));
                         break;
                     }
                 }
@@ -183,14 +183,14 @@ bool QThSynchronize::FileCopy(QFileInfo &QFIPathSource, QFileInfo &QFIPathDestin
             if (QFSource.size()== QFDestination.size()) {
                 FilesCopied++;
                 emit OnGenericEvent(EVENT_TYPE_JOB_STATUS, FilesCopied, DirecoriesCopied, FilesDeleted, DirectoriesDeleted, "");
-                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.birthTime(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, "["+ QFDestination.fileName()+ "]"+ tr(" error on change file date time!"));
+                if (!SetFileDateTime(QFIPathDestination.absoluteFilePath(), QFIPathSource.birthTime(), QFIPathSource.lastRead(), QFIPathSource.lastModified())) emit OnLog(LOG_TYPE_ERROR, QFDestination.fileName(), tr(" error on change file date time!"));
                 else {
-                    emit OnLog(LOG_TYPE_STANDARD, "["+ QFSource.fileName()+ "]"+ tr(" copied"));
+                    emit OnLog(LOG_TYPE_STANDARD, QFSource.fileName(), tr(" copied"));
                     Result= true;
                 }
-            } else emit OnLog(LOG_TYPE_ERROR, "["+ QFSource.fileName()+ "]"+ tr(" error on copy to ")+ QFDestination.fileName());
-        } else emit OnLog(LOG_TYPE_ERROR, "["+ QFSource.fileName()+ "]"+ tr(" error on copy to ")+ QFDestination.fileName());
+            } else emit OnLog(LOG_TYPE_ERROR, QFSource.fileName(), tr(" error on copy to ")+ QFDestination.fileName());
+        } else emit OnLog(LOG_TYPE_ERROR, QFSource.fileName(), tr(" error on copy to ")+ QFDestination.fileName());
         QFSource.close();
-    } else emit OnLog(LOG_TYPE_ERROR, "["+ QFSource.fileName()+ "]"+ tr(" error on copy to ")+ QFDestination.fileName());
+    } else emit OnLog(LOG_TYPE_ERROR, QFSource.fileName(), tr(" error on copy to ")+ QFDestination.fileName());
     return Result;
 }
